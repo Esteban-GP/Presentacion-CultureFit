@@ -1,14 +1,73 @@
-import { useState } from 'react'
-import './App.css'
+import React, { useState } from "react";
+import { useKeenSlider } from "keen-slider/react";
+import "keen-slider/keen-slider.min.css";
+import { IoChevronBackOutline, IoChevronForwardOutline } from "react-icons/io5";
+
+import Slide1 from "./components/Slide1";
+import Slide2 from "./components/Slide2";
+
+const slides = [
+  { id: 1, Component: Slide1 },
+  { id: 2, Component: Slide2 },
+];
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [loaded, setLoaded] = useState(false);
+
+  const [sliderRef, instanceRef] = useKeenSlider(
+    {
+      loop: false,
+      initial: 0,
+      slides: {
+        perView: 1,
+        spacing: 0, // o un valor menor si necesitas espacio
+        origin: 'center',
+      },
+      widthOrHeight: 7,
+      slideChanged(slider) {
+        setCurrentSlide(slider.track.details.rel);
+      },
+      created() {
+        setLoaded(true);
+      },
+    }
+  );
 
   return (
-    <>
-      <div className='bg-red-100'>hola</div>
-    </>
-  )
+    <div className="h-screen overflow-hidden flex flex-col items-center justify-center bg-gradient-to-r from-orange-400 to-orange-600 relative">
+      <div className="flex text-white mb-4 -mt-5 pb-5 text-5xl font-bold montserrat items-center"><img src="./CultureFitLogoBlanco.png" alt="e"  className="h-11 w-14 me-2"/>CultureFit</div>
+      <div ref={sliderRef} className="keen-slider ">
+        {slides.map(({ id, Component }) => (
+          <div key={id} className="keen-slider__slide rounded-2xl !w-40" style={{ width: '160px' }}>
+            <div className="w-[90vw] h-[40vw] mx-auto">
+              <Component />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          instanceRef.current?.prev();
+        }}
+        className="absolute left-2 top-1/2 -translate-y-1/2 text-primary bg-white shadow-xl font-semibold rounded-full text-xl h-11 w-11 z-10"
+      >
+        <IoChevronBackOutline className="mx-auto" />
+      </button>
+
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          instanceRef.current?.next();
+        }}
+        className="absolute right-2 top-1/2 -translate-y-1/2 text-primary bg-white shadow-xl font-semibold rounded-full text-xl h-11 w-11 z-10"
+      >
+        <IoChevronForwardOutline className="mx-auto" />
+      </button>
+    </div>
+  );
 }
 
-export default App
+export default App;
