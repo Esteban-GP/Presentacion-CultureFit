@@ -5,10 +5,16 @@ import { IoChevronBackOutline, IoChevronForwardOutline } from "react-icons/io5";
 
 import Slide1 from "./components/Slide1";
 import Slide2 from "./components/Slide2";
+import Slide3 from "./components/Slide3";
+import Slide4 from "./components/Slide4";
+import Slide5 from "./components/Slide5";
+import Slide6 from "./components/Slide6";
 
 const slides = [
   { id: 1, Component: Slide1 },
   { id: 2, Component: Slide2 },
+  { id: 3, Component: Slide3 },
+  { id: 4, Component: Slide4 },
 ];
 
 function App() {
@@ -52,7 +58,7 @@ function App() {
           e.stopPropagation();
           instanceRef.current?.prev();
         }}
-        className="absolute left-2 top-1/2 -translate-y-1/2 text-primary bg-white shadow-xl font-semibold rounded-full text-xl h-11 w-11 z-10"
+        className="absolute left-2 top-4/7 -translate-y-1/2 text-primary bg-white shadow-xl font-semibold rounded-full text-xl h-11 w-11 z-10"
       >
         <IoChevronBackOutline className="mx-auto" />
       </button>
@@ -62,7 +68,7 @@ function App() {
           e.stopPropagation();
           instanceRef.current?.next();
         }}
-        className="absolute right-2 top-1/2 -translate-y-1/2 text-primary bg-white shadow-xl font-semibold rounded-full text-xl h-11 w-11 z-10"
+        className="absolute right-2 top-4/7 -translate-y-1/2 text-primary bg-white shadow-xl font-semibold rounded-full text-xl h-11 w-11 z-10"
       >
         <IoChevronForwardOutline className="mx-auto" />
       </button>
