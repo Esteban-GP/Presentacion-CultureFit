@@ -10,15 +10,17 @@ import Slide4 from "./components/Slide4";
 import Slide5 from "./components/Slide5";
 import Slide6 from "./components/Slide6";
 import Slide7 from "./components/Slide7";
+import Slide8 from "./components/Slide8";
 
 const slides = [
   { id: 1, Component: Slide1 },
   { id: 2, Component: Slide2 },
-  { id: 3, Component: Slide3 },
-  { id: 4, Component: Slide4 },
-  { id: 5, Component: Slide5 },
-  { id: 6, Component: Slide6 },
-  { id: 7, Component: Slide7 },
+  { id: 3, Component: Slide7 },
+  { id: 4, Component: Slide3 },
+  { id: 5, Component: Slide4 },
+  { id: 6, Component: Slide5 },
+  { id: 7, Component: Slide6 },
+  { id: 8, Component: Slide8 },
 ];
 
 function App() {
