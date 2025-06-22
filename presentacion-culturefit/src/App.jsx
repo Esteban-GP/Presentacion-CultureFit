@@ -9,12 +9,16 @@ import Slide3 from "./components/Slide3";
 import Slide4 from "./components/Slide4";
 import Slide5 from "./components/Slide5";
 import Slide6 from "./components/Slide6";
+import Slide7 from "./components/Slide7";
 
 const slides = [
   { id: 1, Component: Slide1 },
   { id: 2, Component: Slide2 },
   { id: 3, Component: Slide3 },
   { id: 4, Component: Slide4 },
+  { id: 5, Component: Slide5 },
+  { id: 6, Component: Slide6 },
+  { id: 7, Component: Slide7 },
 ];
 
 function App() {
@@ -45,8 +49,8 @@ function App() {
       <div className="flex text-white mb-4 -mt-5 pb-5 text-5xl font-bold montserrat items-center"><img src="./CultureFitLogoBlanco.png" alt="e"  className="h-11 w-14 me-2"/>CultureFit</div>
       <div ref={sliderRef} className="keen-slider ">
         {slides.map(({ id, Component }) => (
-          <div key={id} className="keen-slider__slide rounded-2xl !w-40" style={{ width: '160px' }}>
-            <div className="w-[90vw] h-[40vw] mx-auto">
+          <div key={id} className="keen-slider__slide rounded-2xl" style={{ width: '160px' }}>
+            <div className="w-[90vw] h-180 mx-auto overflow-hidden">
               <Component />
             </div>
           </div>
