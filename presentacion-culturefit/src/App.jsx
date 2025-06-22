@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 import { IoChevronBackOutline, IoChevronForwardOutline } from "react-icons/io5";
@@ -43,6 +43,28 @@ function App() {
       },
     }
   );
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      switch (event.key) {
+        case 'ArrowLeft':
+          event.preventDefault();
+          instanceRef.current?.prev();
+          break;
+        case 'ArrowRight':
+          event.preventDefault();
+          instanceRef.current?.next();
+          break;
+        default:
+          break;
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [instanceRef]);
 
   return (
     <div className="h-screen overflow-hidden flex flex-col items-center justify-center bg-gradient-to-r from-orange-400 to-orange-600 relative">
