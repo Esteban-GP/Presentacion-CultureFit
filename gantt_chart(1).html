@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagrama de Gantt - Proyecto CultureFit</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            border: 2px solid #ff6b35;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #000;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+            font-weight: 600;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #333;
+            margin-bottom: 40px;
+            font-size: 1.2em;
+        }
+        
+        .gantt-container {
+            overflow-x: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .gantt-chart {
+            min-width: 800px;
+            border-collapse: collapse;
+            width: 100%;
+            background: white;
+        }
+        
+        .gantt-chart th {
+            background: #000;
+            color: white;
+            padding: 15px 10px;
+            text-align: center;
+            font-weight: 600;
+            border: 1px solid #333;
+        }
+        
+        .gantt-chart th:first-child {
+            text-align: left;
+            background: #ff6b35;
+            color: white;
+            min-width: 250px;
+        }
+        
+        .gantt-chart td {
+            padding: 12px 8px;
+            border: 1px solid #ddd;
+            text-align: center;
+            position: relative;
+            background: white;
+        }
+        
+        .gantt-chart td:first-child {
+            background: #f8f8f8;
+            font-weight: 600;
+            color: #000;
+            text-align: left;
+            border-left: 4px solid #ff6b35;
+        }
+        
+        .task-bar {
+            background: #ff6b35;
+            height: 25px;
+            border-radius: 8px;
+            margin: 2px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.85em;
+            box-shadow: 0 3px 10px rgba(255, 107, 53, 0.3);
+            transition: all 0.3s ease;
+            border: 1px solid #e55a2b;
+        }
+        
+        .task-bar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
+            background: #e55a2b;
+        }
+        
+        .phase-1 { 
+            background: #333; 
+            border: 1px solid #000;
+            color: white;
+        }
+        .phase-1:hover { 
+            background: #000; 
+        }
+        
+        .phase-2 { 
+            background: #ff6b35; 
+            border: 1px solid #e55a2b;
+            color: white;
+        }
+        .phase-2:hover { 
+            background: #e55a2b; 
+        }
+        
+        .phase-3 { 
+            background: #666; 
+            border: 1px solid #555;
+            color: white;
+        }
+        .phase-3:hover { 
+            background: #555; 
+        }
+        
+        .phase-4 { 
+            background: #ff8c42; 
+            border: 1px solid #ff6b35;
+            color: white;
+        }
+        .phase-4:hover { 
+            background: #ff6b35; 
+        }
+        
+        .phase-5 { 
+            background: #999; 
+            border: 1px solid #777;
+            color: white;
+        }
+        .phase-5:hover { 
+            background: #777; 
+        }
+        
+        .phase-6 { 
+            background: #000; 
+            border: 1px solid #333;
+            color: white;
+        }
+        .phase-6:hover { 
+            background: #333; 
+        }
+        
+        .week-header {
+            background: #f0f0f0;
+            color: #000;
+            border: 1px solid #ccc;
+        }
+        
+        .summary {
+            margin-top: 30px;
+            padding: 25px;
+            background: #000;
+            border-radius: 15px;
+            color: white;
+            border: 3px solid #ff6b35;
+        }
+        
+        .summary h3 {
+            margin-top: 0;
+            font-size: 1.5em;
+            color: #ff6b35;
+        }
+        
+        .phase-details {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .phase-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #ff6b35;
+            border: 2px solid #e0e0e0;
+            transition: transform 0.3s ease;
+        }
+        
+        .phase-card:hover {
+            transform: translateY(-5px);
+            border-color: #ff6b35;
+        }
+        
+        .phase-card h4 {
+            color: #000;
+            margin-top: 0;
+        }
+        
+        .phase-card ul {
+            color: #333;
+            padding-left: 20px;
+        }
+        
+        .phase-card li {
+            margin-bottom: 5px;
+        }
+        
+        .phase-card strong {
+            color: #ff6b35;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+                margin: 10px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .gantt-chart th,
+            .gantt-chart td {
+                padding: 8px 4px;
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Proyecto CultureFit</h1>
+        <p class="subtitle">Cronograma de Desarrollo - Diagrama de Gantt</p>
+        
+        <div class="gantt-container">
+            <table class="gantt-chart">
+                <thead>
+                    <tr>
+                        <th>Fases del Proyecto</th>
+                        <th class="week-header">Sem 1</th>
+                        <th class="week-header">Sem 2</th>
+                        <th class="week-header">Sem 3</th>
+                        <th class="week-header">Sem 4</th>
+                        <th class="week-header">Sem 5</th>
+                        <th class="week-header">Sem 6</th>
+                        <th class="week-header">Sem 7</th>
+                        <th class="week-header">Sem 8</th>
+                        <th class="week-header">Sem 9</th>
+                        <th class="week-header">Sem 10</th>
+                        <th class="week-header">Sem 11</th>
+                        <th class="week-header">Sem 12</th>
+                        <th class="week-header">Sem 13</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>1. Análisis y Planificación</strong><br><small>3 semanas</small></td>
+                        <td><div class="task-bar phase-1">Plan</div></td>
+                        <td><div class="task-bar phase-1">Análisis</div></td>
+                        <td><div class="task-bar phase-1">Req.</div></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><strong>2. Diseño del Sistema</strong><br><small>3 semanas</small></td>
+                        <td></td>
+                        <td></td>
+                        <td><div class="task-bar phase-2">DB</div></td>
+                        <td><div class="task-bar phase-2">API</div></td>
+                        <td><div class="task-bar phase-2">UI</div></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><strong>3. Desarrollo Backend</strong><br><small>5 semanas</small></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><div class="task-bar phase-3">Config</div></td>
+                        <td><div class="task-bar phase-3">Models</div></td>
+                        <td><div class="task-bar phase-3">Controllers</div></td>
+                        <td><div class="task-bar phase-3">Auth</div></td>
+                        <td><div class="task-bar phase-3">Tests</div></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><strong>4. Desarrollo Frontend</strong><br><small>5 semanas</small></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><div class="task-bar phase-4">React</div></td>
+                        <td><div class="task-bar phase-4">UI</div></td>
+                        <td><div class="task-bar phase-4">API</div></td>
+                        <td><div class="task-bar phase-4">Routes</div></td>
+                        <td><div class="task-bar phase-4">Responsive</div></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><strong>5. Testing e Integración</strong><br><small>3 semanas</small></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><div class="task-bar phase-5">Testing</div></td>
+                        <td><div class="task-bar phase-5">Bugs</div></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><strong>6. Despliegue y Docs</strong><br><small>2 semanas</small></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><div class="task-bar phase-6">Deploy</div></td>
+                        <td><div class="task-bar phase-6">Docs</div></td>
+                        
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="summary">
+            <h3>📊 Resumen del Cronograma</h3>
+            <p><strong>Duración total:</strong> 13 semanas (aproximadamente 4 meses)</p>
+            <p><strong>Horas estimadas:</strong> 360-400 horas de desarrollo</p>
+            <p><strong>Recursos:</strong> 3 desarrolladores full-stack</p>
+        </div>
+        
+        <div class="phase-details">
+            <div class="phase-card">
+                <h4>🔍 Fase 1: Análisis y Planificación</h4>
+                <ul>
+                    <li>Definición de requisitos funcionales</li>
+                    <li>Análisis de casos de uso</li>
+                    <li>Planificación de arquitectura</li>
+                    <li>Estimación de recursos</li>
+                </ul>
+                <strong>⏱️ Duración: 3 semanas</strong>
+            </div>
+            
+            <div class="phase-card">
+                <h4>🎨 Fase 2: Diseño del Sistema</h4>
+                <ul>
+                    <li>Diseño de base de datos</li>
+                    <li>Arquitectura de la API REST</li>
+                    <li>Mockups y wireframes</li>
+                    <li>Definición de componentes</li>
+                </ul>
+                <strong>⏱️ Duración: 3 semanas</strong>
+            </div>
+            
+            <div class="phase-card">
+                <h4>⚙️ Fase 3: Backend Development</h4>
+                <ul>
+                    <li>Spring Boot configuration</li>
+                    <li>JPA entities y repositories</li>
+                    <li>REST controllers</li>
+                    <li>JWT authentication</li>
+                    <li>Unit testing</li>
+                </ul>
+                <strong>⏱️ Duración: 5 semanas</strong>
+            </div>
+            
+            <div class="phase-card">
+                <h4>🎯 Fase 4: Frontend Development</h4>
+                <ul>
+                    <li>React setup y routing</li>
+                    <li>Componentes UI con Tailwind</li>
+                    <li>Integración con API</li>
+                    <li>State management</li>
+                    <li>Responsive design</li>
+                </ul>
+                <strong>⏱️ Duración: 5 semanas</strong>
+            </div>
+            
+            <div class="phase-card">
+                <h4>🧪 Fase 5: Testing e Integración</h4>
+                <ul>
+                    <li>Testing de integración</li>
+                    <li>Testing end-to-end</li>
+                    <li>Corrección de bugs</li>
+                    <li>Optimización de rendimiento</li>
+                </ul>
+                <strong>⏱️ Duración: 3 semanas</strong>
+            </div>
+            
+            <div class="phase-card">
+                <h4>🚀 Fase 6: Despliegue y Documentación</h4>
+                <ul>
+                    <li>Configuración de producción</li>
+                    <li>Deploy en cloud (AWS/Azure)</li>
+                    <li>Documentación técnica</li>
+                    <li>Manual de usuario</li>
+                </ul>
+                <strong>⏱️ Duración: 2 semanas</strong>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
