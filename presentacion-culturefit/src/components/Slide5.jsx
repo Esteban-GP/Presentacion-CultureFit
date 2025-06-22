@@ -16,7 +16,7 @@ function Slide5() {
                 </div>
 
                 <div className='col-span-2 grid'>
-                    <p className="font-bold flex justify-center items-center text-2xl">Se opta por la claridad y el minimalismo</p>
+                    <p className="font-bold flex justify-center items-center text-2xl text-center w-full px-10">Se opta por la claridad y el minimalismo con colores que transmiten energía y fuerza</p>
                     <div className="bg-gray-100 p-4 rounded-2xl shadow-sm flex flex-col items-center justify-center">
                         <p className="montserrat font-bold text-xl">Uso de Montserrat para títulos</p>
                         <p className="poppins text-lg">Y Poppins para el resto de los textos</p>
